@@ -34,8 +34,7 @@ logs/
 # Azure
 LocalSettings.json
 
-# Configuration files
-appsettings*.json
+
 
 # Rider IDE
 .idea/
