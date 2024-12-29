@@ -25,6 +25,14 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    SeedData.Initialize(serviceProvider);
+}
+
+
 app.UseRouting();
 
 //if (app.Environment.IsDevelopment())
