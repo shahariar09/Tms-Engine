@@ -1,5 +1,6 @@
 using System.Reflection;
 using Tms.Application.Mappings;
+using Tms.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
