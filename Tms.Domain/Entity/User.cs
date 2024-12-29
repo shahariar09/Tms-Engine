@@ -6,6 +6,7 @@ namespace Tms.Domain.Entity;
 [Table("TMS_USER")]
 public class User
 {
+    [Key]
     public int Id { get; set; }
     public string? Name { get; set; }
     public string? Email { get; set; }
