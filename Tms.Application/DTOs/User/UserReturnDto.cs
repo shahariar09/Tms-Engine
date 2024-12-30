@@ -12,6 +12,6 @@ namespace Tms.Application.DTOs.User
         public string? Name { get; set; }
         public string? Email { get; set; }
         public int? RoleId { get; set; }
-        public int? RoleName { get; set; }
+        public string? RoleName { get; set; }
     }
 }

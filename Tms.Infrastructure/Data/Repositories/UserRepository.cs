@@ -16,12 +16,16 @@ namespace Tms.Infrastructure.Data.Repositories
 
         public async Task<User> GetByIdAsync(int id)
         {
-            return await _dbContext.Users.FindAsync(id);
+            return await _dbContext.Users
+                .Include(c => c.Role)
+                .FirstOrDefaultAsync(c=>c.Id==id);
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _dbContext.Users.ToListAsync();
+            return await _dbContext.Users
+                .Include(c=>c.Role)
+                .ToListAsync();
         }
 
         public async Task AddAsync(User User)
