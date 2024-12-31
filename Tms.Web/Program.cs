@@ -19,7 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddInfrastructureServices(builder.Configuration); 
+builder.Services.AddInfrastructureServices(builder.Configuration);  
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
