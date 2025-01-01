@@ -12,8 +12,8 @@ using Tms.Infrastructure;
 namespace Tms.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241229060857_AddKeyToUser")]
-    partial class AddKeyToUser
+    [Migration("20250101064728_initial_create")]
+    partial class initial_create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,23 +100,23 @@ namespace Tms.Infrastructure.Migrations
 
             modelBuilder.Entity("Tms.Domain.Entity.UserTask", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("TaskId")
+                    b.Property<int>("TaskItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId1")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("TaskItemId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("TMS_USER_TASK");
                 });
@@ -132,19 +132,19 @@ namespace Tms.Infrastructure.Migrations
 
             modelBuilder.Entity("Tms.Domain.Entity.UserTask", b =>
                 {
-                    b.HasOne("Tms.Domain.Entity.TaskItem", "Task")
+                    b.HasOne("Tms.Domain.Entity.TaskItem", "TaskItem")
                         .WithMany("AssignedUsers")
-                        .HasForeignKey("TaskId")
+                        .HasForeignKey("TaskItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Tms.Domain.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Task");
+                    b.Navigation("TaskItem");
 
                     b.Navigation("User");
                 });

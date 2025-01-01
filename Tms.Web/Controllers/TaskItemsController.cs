@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tms.Application.DTOs;
 using Tms.Application.Services;
+using Tms.Application.ServiceAbstractions;
 
 
 
@@ -15,9 +16,9 @@ namespace Tms.Web.Controllers
     [Route("api/[controller]")]
     public class TaskItemsController : ControllerBase
     {
-        private readonly TaskItemService _taskService;
+        private readonly ITaskItemService _taskService;
 
-        public TaskItemsController(TaskItemService taskService)
+        public TaskItemsController(ITaskItemService taskService)
         {
             _taskService = taskService;
         }

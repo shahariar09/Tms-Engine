@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection.Emit;
+using Microsoft.EntityFrameworkCore;
 using Tms.Domain.Entity;
 
 namespace Tms.Infrastructure
@@ -16,21 +17,17 @@ namespace Tms.Infrastructure
         {
             base.OnModelCreating(builder);
 
-            // Configure UserTask as a join table
-            builder.Entity<UserTask>()
-                .HasKey(ut => new { ut.UserId, ut.TaskId }); // Composite primary key
 
-            builder.Entity<UserTask>()
-                .HasOne(ut => ut.User)
-                .WithMany() // No navigation property in User
-                .HasForeignKey(ut => ut.UserId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes if required
-
-            builder.Entity<UserTask>()
-                .HasOne(ut => ut.Task)
-                .WithMany() // No navigation property in TaskItem
-                .HasForeignKey(ut => ut.TaskId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes if required
+            //builder.Entity<UserTask>()
+            //.HasOne(ut => ut.TaskItem)
+            //.WithMany() // or .WithOne(), depending on your design
+            //.HasForeignKey(ut => ut.TaskItemId);
         }
     }
 }
+
+
+
+
+
+

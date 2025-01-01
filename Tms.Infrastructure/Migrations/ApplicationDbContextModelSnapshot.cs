@@ -36,7 +36,7 @@ namespace Tms.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TMS_ROLE", (string)null);
+                    b.ToTable("TMS_ROLE");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.TaskItem", b =>
@@ -68,7 +68,7 @@ namespace Tms.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TMS_TASK_ITEM", (string)null);
+                    b.ToTable("TMS_TASK_ITEM");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.User", b =>
@@ -92,30 +92,30 @@ namespace Tms.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("TMS_USER", (string)null);
+                    b.ToTable("TMS_USER");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.UserTask", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("TaskId")
+                    b.Property<int>("TaskItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId1")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("TaskItemId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("TMS_USER_TASK", (string)null);
+                    b.ToTable("TMS_USER_TASK");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.User", b =>
@@ -129,19 +129,19 @@ namespace Tms.Infrastructure.Migrations
 
             modelBuilder.Entity("Tms.Domain.Entity.UserTask", b =>
                 {
-                    b.HasOne("Tms.Domain.Entity.TaskItem", "Task")
+                    b.HasOne("Tms.Domain.Entity.TaskItem", "TaskItem")
                         .WithMany("AssignedUsers")
-                        .HasForeignKey("TaskId")
+                        .HasForeignKey("TaskItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Tms.Domain.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Task");
+                    b.Navigation("TaskItem");
 
                     b.Navigation("User");
                 });

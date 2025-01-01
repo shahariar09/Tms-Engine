@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Tms.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddKeyToUser : Migration
+    public partial class initial_create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -65,23 +65,23 @@ namespace Tms.Infrastructure.Migrations
                 name: "TMS_USER_TASK",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId1 = table.Column<int>(type: "int", nullable: false),
-                    TaskId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    TaskItemId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TMS_USER_TASK", x => x.UserId);
+                    table.PrimaryKey("PK_TMS_USER_TASK", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TMS_USER_TASK_TMS_TASK_ITEM_TaskId",
-                        column: x => x.TaskId,
+                        name: "FK_TMS_USER_TASK_TMS_TASK_ITEM_TaskItemId",
+                        column: x => x.TaskItemId,
                         principalTable: "TMS_TASK_ITEM",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TMS_USER_TASK_TMS_USER_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_TMS_USER_TASK_TMS_USER_UserId",
+                        column: x => x.UserId,
                         principalTable: "TMS_USER",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -93,14 +93,14 @@ namespace Tms.Infrastructure.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TMS_USER_TASK_TaskId",
+                name: "IX_TMS_USER_TASK_TaskItemId",
                 table: "TMS_USER_TASK",
-                column: "TaskId");
+                column: "TaskItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TMS_USER_TASK_UserId1",
+                name: "IX_TMS_USER_TASK_UserId",
                 table: "TMS_USER_TASK",
-                column: "UserId1");
+                column: "UserId");
         }
 
         /// <inheritdoc />
