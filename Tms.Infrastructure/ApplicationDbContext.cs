@@ -15,6 +15,8 @@ namespace Tms.Infrastructure
 
         public DbSet<Project> Projects { get; set; }    
 
+        public DbSet<ProjectUser> ProjectUsers { get; set; }    
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
