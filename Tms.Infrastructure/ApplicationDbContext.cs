@@ -13,6 +13,8 @@ namespace Tms.Infrastructure
         public DbSet<TaskItem> TaskItems { get; set; }
         public DbSet<UserTask> UserTasks { get; set; }
 
+        public DbSet<Project> Projects { get; set; }    
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
