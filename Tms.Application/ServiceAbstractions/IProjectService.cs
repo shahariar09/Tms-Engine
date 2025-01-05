@@ -7,7 +7,7 @@ using Tms.Application.DTOs;
 
 namespace Tms.Application.ServiceAbstractions
 {
-    internal interface IProjectService
+    public interface IProjectService
     {
         Task<IEnumerable<ProjectDto>> GetAllProjectsAsync();
         Task<ProjectDto> GetProjectByIdAsync(int id);

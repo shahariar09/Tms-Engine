@@ -26,6 +26,9 @@ namespace Tms.Infrastructure
             services.AddTransient<ITaskItemRepository, TaskItemRepository>();
             services.AddTransient<ITaskItemService, TaskItemService>();
 
+            services.AddTransient<IProjectRepository, ProjectRepository>();
+            services.AddTransient<IProjectService, ProjectService>();
+
             return services;
         }
     }

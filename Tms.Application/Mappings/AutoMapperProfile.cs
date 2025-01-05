@@ -11,7 +11,10 @@ namespace Tms.Application.Mappings
         {
             CreateMap<UserCreateDto, User>();
             CreateMap<User, UserReturnDto>();
-           
+
+            CreateMap<Project, ProjectDto>();
+            CreateMap<CreateProjectDto, Project>();
+
             CreateMap<TaskItem, TaskItemDto>()
                     .ForMember(dest => dest.AssignedUsers, opt => opt.MapFrom(src => src.AssignedUsers));
 
