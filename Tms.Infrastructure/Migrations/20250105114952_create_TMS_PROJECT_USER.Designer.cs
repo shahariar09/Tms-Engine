@@ -12,7 +12,7 @@ using Tms.Infrastructure;
 namespace Tms.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250105105134_create_TMS_PROJECT_USER")]
+    [Migration("20250105114952_create_TMS_PROJECT_USER")]
     partial class create_TMS_PROJECT_USER
     {
         /// <inheritdoc />
@@ -47,6 +47,29 @@ namespace Tms.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TMS_PROJECT");
+                });
+
+            modelBuilder.Entity("Tms.Domain.Entity.ProjectUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TMS_PROJECT_USER");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.Role", b =>
@@ -143,6 +166,25 @@ namespace Tms.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("TMS_USER_TASK");
+                });
+
+            modelBuilder.Entity("Tms.Domain.Entity.ProjectUser", b =>
+                {
+                    b.HasOne("Tms.Domain.Entity.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tms.Domain.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.User", b =>
