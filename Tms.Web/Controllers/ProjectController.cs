@@ -62,5 +62,45 @@ namespace Tms.Web.Controllers
             if (!result) return NotFound();
             return NoContent();
         }
+
+
+        //assign project to user
+        [HttpPost("assign-user")]
+        public async Task<IActionResult> AssignUserToProject([FromQuery] int userId, [FromQuery] int projectId)
+        {
+            try
+            {
+                await _projectService.AssignProjectToUser(projectId, userId);
+                return Ok(new { message = "User successfully assigned to project" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "An error occurred while assigning the user to the project",
+                    error = ex.Message,
+                    innerError = ex.InnerException?.Message
+                });
+            }
+        }
+
+        //[HttpDelete("unassign-user")]
+        //public async Task<IActionResult> UnassignUserFromProject([FromQuery] int userId, [FromQuery] int projectId)
+        //{
+        //    try
+        //    {
+        //        await _projectService.UnassignProjectFromUser(projectId, userId);
+        //        return Ok(new { message = "User successfully unassigned from project" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new
+        //        {
+        //            message = "An error occurred while unassigning the user from the project",
+        //            error = ex.Message,
+        //            innerError = ex.InnerException?.Message
+        //        });
+        //    }
+        //}
     }
 }

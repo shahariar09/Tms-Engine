@@ -29,6 +29,7 @@ namespace Tms.Infrastructure
             services.AddTransient<IProjectRepository, ProjectRepository>();
             services.AddTransient<IProjectService, ProjectService>();
             services.AddScoped<IUserTaskRepository, UserTaskRepository>();
+            services.AddScoped<IProjectAssignUserRepository, ProjectAssignUserRepository>();
             return services;
         }
     }

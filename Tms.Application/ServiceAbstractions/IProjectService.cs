@@ -14,5 +14,7 @@ namespace Tms.Application.ServiceAbstractions
         Task<ProjectDto> CreateProjectAsync(CreateProjectDto projectDto);
         Task<ProjectDto> UpdateProjectAsync(int id, CreateProjectDto projectDto);
         Task<bool> DeleteProjectAsync(int id);
+
+        Task AssignProjectToUser(int projectId, int userId);
     }
 }

@@ -24,6 +24,7 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddScoped<IUserTaskRepository, UserTaskRepository>();
+builder.Services.AddScoped<IProjectAssignUserRepository, ProjectAssignUserRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();

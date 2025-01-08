@@ -12,13 +12,28 @@ namespace Tms.Application.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IProjectAssignUserRepository _projectAssignUserRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public ProjectService(IProjectRepository projectRepository, IMapper mapper)
+        //public ProjectService(IProjectRepository projectRepository, IMapper mapper)
+        //{
+        //    _projectRepository = projectRepository;
+        //    _mapper = mapper;
+        //}
+
+        public ProjectService(
+           IProjectRepository projectRepository,
+           IProjectAssignUserRepository projectAssignUserRepository,
+           IUserRepository userRepository,
+           IMapper mapper)
         {
             _projectRepository = projectRepository;
+            _projectAssignUserRepository = projectAssignUserRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
+
 
         public async Task<IEnumerable<ProjectDto>> GetAllProjectsAsync()
         {
@@ -69,6 +84,42 @@ namespace Tms.Application.Services
                 throw new Exception("Project not found");
 
             return await _projectRepository.DeleteAsync(id);
+        }
+
+        //assign project
+
+        public async Task AssignProjectToUser(int projectId, int userId)
+        {
+            try
+            {
+                // Check if user exists
+                var user = await _userRepository.GetByIdAsync(userId);
+                if (user == null)
+                    throw new Exception("User not found");
+
+                // Check if project exists
+                var project = await _projectRepository.GetByIdAsync(projectId);
+                if (project == null)
+                    throw new Exception("Project not found");
+
+                // Check if the user is already assigned to the project
+                var existingAssignment = await _projectAssignUserRepository.GetProjectAssignUserAsync(userId, projectId);
+                if (existingAssignment != null)
+                    throw new Exception("User is already assigned to this project");
+
+                // Assign the user to the project
+                var projectAssignUser = new ProjectUser
+                {
+                    UserId = userId,
+                    ProjectId = projectId
+                };
+
+                await _projectAssignUserRepository.AddProjectAssignUserAsync(projectAssignUser);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in AssignProjectToUser: {ex.Message}", ex);
+            }
         }
     }
 }
