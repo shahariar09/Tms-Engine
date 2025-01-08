@@ -16,19 +16,22 @@ namespace Tms.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<TaskItem>> GetAllAsync()
-        {
-            return await _context.TaskItems
-                .Include(t => t.AssignedUsers)
-                .ToListAsync();
-        }
-
         public async Task<TaskItem> GetByIdAsync(int id)
         {
             return await _context.TaskItems
                 .Include(t => t.AssignedUsers)
+                    .ThenInclude(ut => ut.User)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
+
+        public async Task<IEnumerable<TaskItem>> GetAllAsync()
+        {
+            return await _context.TaskItems
+                .Include(t => t.AssignedUsers)
+                    .ThenInclude(ut => ut.User)
+                .ToListAsync();
+        }
+
 
         public async Task<TaskItem> CreateAsync(TaskItem taskItem)
         {

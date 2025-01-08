@@ -1,7 +1,9 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Tms.Application.Mappings;
+using Tms.Domain.RepositoryAbstractions;
 using Tms.Infrastructure;
+using Tms.Infrastructure.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +21,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddInfrastructureServices(builder.Configuration);  
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
-
+builder.Services.AddScoped<IUserTaskRepository, UserTaskRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();

@@ -18,7 +18,7 @@ namespace Tms.Domain.Entity
         public string Priority { get; set; } // Low, Medium, High
         public string Status { get; set; } // To-Do, In Progress, Completed
         public DateTime DueDate { get; set; }
-        public ICollection<UserTask> AssignedUsers { get; set; } // Many-to-Many with Users
-
+        // public ICollection<UserTask> AssignedUsers { get; set; } // Many-to-Many with Users
+        public virtual ICollection<UserTask> AssignedUsers { get; set; } = new List<UserTask>();
     }
 }

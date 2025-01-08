@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Tms.Application.DTOs;
 using Tms.Application.ServiceAbstractions;
 using Tms.Domain.Entity;
 using Tms.Domain.RepositoryAbstractions;
+//using Tms.Application.Common.Exception;
+using static Tailoring.Application.Common.Exceptions.ValidationException;
 
 namespace Tms.Application.Services
 {
@@ -13,11 +12,19 @@ namespace Tms.Application.Services
     {
         private readonly ITaskItemRepository _taskItemRepository;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserTaskRepository _userTaskRepository;
 
-        public TaskItemService(ITaskItemRepository taskItemRepository, IMapper mapper)
+        public TaskItemService(
+            ITaskItemRepository taskItemRepository,
+            IMapper mapper,
+            IUserRepository userRepository,
+            IUserTaskRepository userTaskRepository)
         {
             _taskItemRepository = taskItemRepository;
             _mapper = mapper;
+            _userRepository = userRepository;
+            _userTaskRepository = userTaskRepository;
         }
 
         public async Task<IEnumerable<TaskItemDto>> GetAllTasksAsync()
@@ -68,5 +75,45 @@ namespace Tms.Application.Services
         {
             return await _taskItemRepository.DeleteAsync(id);
         }
+
+        public async Task AssignUserToTask(int userId, int taskId)
+        {
+            try
+            {
+                // user exists check
+                var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                throw new BadRequestException("User not found");
+            // task exists check
+            var task = await _taskItemRepository.GetByIdAsync(taskId);
+            if (task == null)
+                throw new BadRequestException("Task not found");
+            // user is already assigned to the task or not 
+            
+            var existingAssignment = await _userTaskRepository.GetUserTaskAsync(userId, taskId);
+            if (existingAssignment != null)
+                throw new BadRequestException("User is already assigned to this task");
+
+            // Assign the user to the task
+            var userTask = new UserTask
+            {
+                UserId = userId,
+                TaskItemId = taskId
+            };
+            try
+            {
+                // Add the new assignment to the UserTasks table
+                await _userTaskRepository.AddUserTaskAsync(userTask);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to save user task assignment: {ex.Message}", ex);
+            }
+        }
+    catch (Exception ex)
+    {
+        throw new Exception($"Error in AssignUserToTask: {ex.Message}", ex);
+    }
+}
     }
 }

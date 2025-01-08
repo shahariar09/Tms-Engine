@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tms.Infrastructure;
 
@@ -11,9 +12,11 @@ using Tms.Infrastructure;
 namespace Tms.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250106173359_AddUserTaskEntity")]
+    partial class AddUserTaskEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,12 +156,17 @@ namespace Tms.Infrastructure.Migrations
                     b.Property<int>("TaskItemId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TaskItemId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TaskItemId");
+
+                    b.HasIndex("TaskItemId1");
 
                     b.HasIndex("UserId");
 
@@ -196,10 +204,14 @@ namespace Tms.Infrastructure.Migrations
             modelBuilder.Entity("Tms.Domain.Entity.UserTask", b =>
                 {
                     b.HasOne("Tms.Domain.Entity.TaskItem", "TaskItem")
-                        .WithMany("AssignedUsers")
+                        .WithMany()
                         .HasForeignKey("TaskItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Tms.Domain.Entity.TaskItem", null)
+                        .WithMany("AssignedUsers")
+                        .HasForeignKey("TaskItemId1");
 
                     b.HasOne("Tms.Domain.Entity.User", "User")
                         .WithMany()
