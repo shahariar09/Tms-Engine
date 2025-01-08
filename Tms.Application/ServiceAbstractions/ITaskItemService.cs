@@ -12,5 +12,6 @@ namespace Tms.Application.ServiceAbstractions
         Task<TaskItemDto> UpdateTaskAsync(int id, CreateTaskItemDto taskDto);
         Task<bool> DeleteTaskAsync(int id);
         Task AssignUserToTask(int userId, int taskId);
+        Task UnassignUserFromTask(int userId, int taskId);
     }
      }

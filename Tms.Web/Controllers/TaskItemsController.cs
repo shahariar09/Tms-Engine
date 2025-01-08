@@ -101,5 +101,30 @@ namespace Tms.Web.Controllers
                 });
             }
         }
+
+        [HttpDelete("unassign-user")]
+        public async Task<IActionResult> UnassignUserFromTask([FromQuery] int userId, [FromQuery] int taskId)
+        {
+            try
+            {
+                await _taskService.UnassignUserFromTask(userId, taskId);
+                return Ok(new { message = "User successfully unassigned from task" });
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Log the full exception details
+                return StatusCode(500, new
+                {
+                    message = "An error occurred while unassigning the user from the task",
+                    error = ex.Message,
+                    innerError = ex.InnerException?.Message
+                });
+            }
+        }
+
     }
 }
