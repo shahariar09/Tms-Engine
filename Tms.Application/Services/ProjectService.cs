@@ -121,5 +121,31 @@ namespace Tms.Application.Services
                 throw new Exception($"Error in AssignProjectToUser: {ex.Message}", ex);
             }
         }
+
+        //unassign project
+
+        public async Task UnassignUserFromProject(int projectId, int userId)
+        {
+            try
+            {
+                // Check if the assignment exists
+                var existingAssignment = await _projectAssignUserRepository.GetProjectAssignUserAsync(userId, projectId);
+                if (existingAssignment == null)
+                    throw new Exception("User is not assigned to this project");
+
+                // Remove the assignment
+                await _projectAssignUserRepository.DeleteProjectAssignUserAsync(existingAssignment);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in UnassignUserFromProject: {ex.Message}", ex);
+            }
+        }
+
+        
+
+
+
+
     }
 }

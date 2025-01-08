@@ -12,5 +12,6 @@ namespace Tms.Domain.RepositoryAbstractions
         Task<ProjectUser> GetProjectAssignUserAsync(int UserId, int ProjectId);
         Task AddProjectAssignUserAsync(ProjectUser projectAssignUser);
         Task RemoveProjectAssignUserAsync(int userId, int projectId);
+        Task DeleteProjectAssignUserAsync(ProjectUser projectAssignUser);
     }
 }
