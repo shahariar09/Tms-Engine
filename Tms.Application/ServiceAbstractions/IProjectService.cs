@@ -16,5 +16,7 @@ namespace Tms.Application.ServiceAbstractions
         Task<bool> DeleteProjectAsync(int id);
 
         Task AssignProjectToUser(int projectId, int userId);
+        Task UnassignUserFromProject(int projectId, int userId);
+
     }
 }

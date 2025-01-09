@@ -1,18 +1,4 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-
-//namespace Tms.Infrastructure.Data.Repositories
-//{
-//    public class ProjectAssignUserRepository
-//    {
-//    }
-//}
-
-
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tms.Domain.Entity;
@@ -32,15 +18,15 @@ namespace Tms.Infrastructure.Data.Repositories
 
         public async Task<ProjectUser> GetProjectAssignUserAsync(int userId, int projectId)
         {
-            return await _context.ProjectUsers
-                .FirstOrDefaultAsync(pau => pau.UserId == userId && pau.ProjectId == projectId);
+            return await _context.ProjectAssignUsers
+                .FirstOrDefaultAsync(pu => pu.UserId == userId && pu.ProjectId == projectId);
         }
 
         public async Task AddProjectAssignUserAsync(ProjectUser projectAssignUser)
         {
             try
             {
-                await _context.ProjectUsers.AddAsync(projectAssignUser);
+                await _context.ProjectAssignUsers.AddAsync(projectAssignUser);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -56,13 +42,22 @@ namespace Tms.Infrastructure.Data.Repositories
                 var projectAssignUser = await GetProjectAssignUserAsync(userId, projectId);
                 if (projectAssignUser != null)
                 {
-                    _context.ProjectUsers.Remove(projectAssignUser);
+                    _context.ProjectAssignUsers.Remove(projectAssignUser);
                     await _context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception($"Failed to remove user from project: {ex.Message}", ex);
+            }
+        }
+
+        public async Task DeleteProjectAssignUserAsync(ProjectUser projectAssignUser)
+        {
+            if (projectAssignUser != null)
+            {
+                _context.ProjectAssignUsers.Remove(projectAssignUser);
+                await _context.SaveChangesAsync();
             }
         }
     }

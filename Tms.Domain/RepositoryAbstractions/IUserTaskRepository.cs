@@ -11,5 +11,6 @@ namespace Tms.Domain.RepositoryAbstractions
     {
         Task<UserTask> GetUserTaskAsync(int userId, int taskId);
         Task AddUserTaskAsync(UserTask userTask);
+        Task<bool> RemoveUserTaskAsync(int userId, int taskId);
     }
 }

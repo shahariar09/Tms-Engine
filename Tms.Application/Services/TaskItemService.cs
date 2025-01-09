@@ -115,5 +115,29 @@ namespace Tms.Application.Services
         throw new Exception($"Error in AssignUserToTask: {ex.Message}", ex);
     }
 }
+
+        public async Task UnassignUserFromTask(int userId, int taskId)
+        {
+            // Check if user exists
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                throw new BadRequestException($"User with ID {userId} not found");
+
+            // Check if task exists
+            var task = await _taskItemRepository.GetByIdAsync(taskId);
+            if (task == null)
+                throw new BadRequestException($"Task with ID {taskId} not found");
+
+            // Check if the assignment exists
+            var existingAssignment = await _userTaskRepository.GetUserTaskAsync(userId, taskId);
+            if (existingAssignment == null)
+                throw new BadRequestException($"User {userId} is not assigned to task {taskId}");
+
+            // Remove the assignment
+            var result = await _userTaskRepository.RemoveUserTaskAsync(userId, taskId);
+            if (!result)
+                throw new Exception("Failed to remove user task assignment");
+        }
+
     }
 }

@@ -84,23 +84,24 @@ namespace Tms.Web.Controllers
             }
         }
 
-        //[HttpDelete("unassign-user")]
-        //public async Task<IActionResult> UnassignUserFromProject([FromQuery] int userId, [FromQuery] int projectId)
-        //{
-        //    try
-        //    {
-        //        await _projectService.UnassignProjectFromUser(projectId, userId);
-        //        return Ok(new { message = "User successfully unassigned from project" });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new
-        //        {
-        //            message = "An error occurred while unassigning the user from the project",
-        //            error = ex.Message,
-        //            innerError = ex.InnerException?.Message
-        //        });
-        //    }
-        //}
+        [HttpDelete("unassign-user")]
+        public async Task<IActionResult> UnassignUserFromProject([FromQuery] int projectId, [FromQuery] int userId)
+        {
+            try
+            {
+                await _projectService.UnassignUserFromProject(projectId, userId);
+                return Ok(new { message = "User successfully unassigned from the project" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "An error occurred while unassigning the user from the project",
+                    error = ex.Message,
+                    innerError = ex.InnerException?.Message
+                });
+            }
+        }
+
     }
 }

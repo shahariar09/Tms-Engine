@@ -18,12 +18,18 @@ namespace Tms.Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<Project>> GetAllAsync()
         {
-            return await _context.Projects.ToListAsync();
+            return await _context.Projects
+                .Include(p => p.ProjectAssignUsers) 
+                .ThenInclude(pu => pu.User)        
+                .ToListAsync();
         }
 
         public async Task<Project> GetByIdAsync(int id)
         {
-            return await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Projects
+               .Include(p => p.ProjectAssignUsers) 
+               .ThenInclude(pu => pu.User)        
+               .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Project> CreateAsync(Project project)
@@ -48,6 +54,24 @@ namespace Tms.Infrastructure.Data.Repositories
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        // Get all projects with users
+        public async Task<IEnumerable<Project>> GetAllProjectsWithUsersAsync()
+        {
+            return await _context.Projects
+                .Include(p => p.ProjectAssignUsers) 
+                .ThenInclude(pu => pu.User)        
+                .ToListAsync();
+        }
+
+        //  Get a single project with users by ID
+        public async Task<Project> GetProjectWithUsersByIdAsync(int id)
+        {
+            return await _context.Projects
+                .Include(p => p.ProjectAssignUsers) 
+                .ThenInclude(pu => pu.User)       
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }

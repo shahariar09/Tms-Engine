@@ -16,7 +16,7 @@ namespace Tms.Infrastructure
         public DbSet<TaskItem> TaskItems { get; set; }
         public DbSet<UserTask> UserTasks { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<ProjectUser> ProjectUsers { get; set; }
+        public DbSet<ProjectUser> ProjectAssignUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,7 +34,25 @@ namespace Tms.Infrastructure
                     .WithMany(t => t.AssignedUsers)
                     .HasForeignKey(ut => ut.TaskItemId)
                     .OnDelete(DeleteBehavior.Restrict);
-            });   
+            });
+
+            builder.Entity<ProjectUser>(entity =>
+            {
+                // Composite key for the many-to-many table
+                entity.HasKey(pu => new { pu.ProjectId, pu.UserId });
+
+                // Relationship between Project and ProjectAssignUser
+                entity.HasOne(pu => pu.Project)
+                    .WithMany(p => p.ProjectAssignUsers)
+                    .HasForeignKey(pu => pu.ProjectId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Relationship between User and ProjectAssignUser
+                entity.HasOne(pu => pu.User)
+                    .WithMany(u => u.ProjectAssignUsers)
+                    .HasForeignKey(pu => pu.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }

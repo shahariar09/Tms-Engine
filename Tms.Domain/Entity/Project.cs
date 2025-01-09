@@ -10,5 +10,7 @@ namespace Tms.Domain.Entity
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
+
+        public ICollection<ProjectUser> ProjectAssignUsers { get; set; }
     }
 }

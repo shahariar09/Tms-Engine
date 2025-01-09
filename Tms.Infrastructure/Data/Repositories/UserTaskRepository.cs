@@ -37,6 +37,20 @@ namespace Tms.Infrastructure.Data.Repositories
                 throw new Exception($"Failed to add user task: {ex.Message}", ex);
             }
         }
+
+        public async Task<bool> RemoveUserTaskAsync(int userId, int taskId)
+        {
+            var userTask = await _context.UserTasks
+                .FirstOrDefaultAsync(ut => ut.UserId == userId && ut.TaskItemId == taskId);
+
+            if (userTask == null)
+                return false;
+
+            _context.UserTasks.Remove(userTask);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }
 

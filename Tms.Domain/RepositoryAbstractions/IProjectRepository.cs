@@ -11,5 +11,9 @@ namespace Tms.Domain.RepositoryAbstractions
         Task<Project> CreateAsync(Project project);
         Task<Project> UpdateAsync(Project project);
         Task<bool> DeleteAsync(int id);
+        //Include Assigned Users in GetAllProjects and GetProjectById
+        Task<IEnumerable<Project>> GetAllProjectsWithUsersAsync();
+        Task<Project> GetProjectWithUsersByIdAsync(int id);
+
     }
 }
