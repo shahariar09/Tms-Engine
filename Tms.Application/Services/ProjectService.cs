@@ -110,6 +110,7 @@ namespace Tms.Application.Services
                 // Assign the user to the project
                 var projectAssignUser = new ProjectUser
                 {
+
                     UserId = userId,
                     ProjectId = projectId
                 };

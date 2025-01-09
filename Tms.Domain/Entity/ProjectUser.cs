@@ -7,8 +7,7 @@ namespace Tms.Domain.Entity
     [Table("TMS_PROJECT_USER")]
     public class ProjectUser
     {
-        [Key]
-        public int Id { get; set; }
+
 
         [ForeignKey("Project")]
         public int ProjectId { get; set; }
