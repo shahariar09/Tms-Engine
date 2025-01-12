@@ -56,5 +56,37 @@ namespace Tms.Infrastructure.Data.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<IEnumerable<TaskItem>> GetTasksByProjectIdAsync(int projectId)
+        {
+            return await _context.TaskItems
+                .Include(t => t.AssignedUsers)
+                    .ThenInclude(ut => ut.User)
+                .Where(t => t.ProjectId == projectId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<TaskItem>> GetTasksByProjectAndStatusAsync(int projectId, string status)
+        {
+            return await _context.TaskItems
+                .Include(t => t.AssignedUsers)
+                    .ThenInclude(ut => ut.User)
+                .Where(t => t.ProjectId == projectId && t.Status == status)
+                .ToListAsync();
+        }
+
+        public async Task<bool> UpdateTaskStatusAsync(int taskId, string newStatus)
+        {
+            //if (!TaskStatusEnum.ValidStatuses.Contains(newStatus))
+            //    return false;
+
+            var task = await _context.TaskItems.FindAsync(taskId);
+            if (task == null)
+                return false;
+
+            task.Status = newStatus;
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
+

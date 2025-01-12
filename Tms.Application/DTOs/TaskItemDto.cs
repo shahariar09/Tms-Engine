@@ -17,6 +17,7 @@ namespace Tms.Application.DTOs
         public string Priority { get; set; }
         public string Status { get; set; }
         public DateTime DueDate { get; set; }
+        public int ProjectId { get; set; }
         public List<UserTaskDto> AssignedUsers { get; set; }
     }
 
@@ -27,6 +28,7 @@ namespace Tms.Application.DTOs
         public string Priority { get; set; }
         public string Status { get; set; }
         public DateTime DueDate { get; set; }
+        public int ProjectId { get; set; }
 
         // List to capture IDs of users being assigned to this task
         public List<int> AssignedUserIds { get; set; }

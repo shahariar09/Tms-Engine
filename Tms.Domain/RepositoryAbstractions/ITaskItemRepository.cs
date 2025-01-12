@@ -12,5 +12,10 @@ namespace Tms.Domain.RepositoryAbstractions
         Task<TaskItem> CreateAsync(TaskItem taskItem);
         Task<TaskItem> UpdateAsync(TaskItem taskItem);
         Task<bool> DeleteAsync(int id);
+
+        Task<IEnumerable<TaskItem>> GetTasksByProjectIdAsync(int projectId);
+        Task<IEnumerable<TaskItem>> GetTasksByProjectAndStatusAsync(int projectId, string status);
+        Task<bool> UpdateTaskStatusAsync(int taskId, string newStatus);
+        //Task<List<TaskItem>> GetTasksByProjectIdAsync(int projectId);
     }
 }

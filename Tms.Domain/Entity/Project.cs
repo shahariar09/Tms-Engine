@@ -12,5 +12,7 @@ namespace Tms.Domain.Entity
         public DateTime DueDate { get; set; }
 
         public ICollection<ProjectUser> ProjectAssignUsers { get; set; }
+        public virtual ICollection<TaskItem> TaskItems { get; set; } = new List<TaskItem>();
+
     }
 }
