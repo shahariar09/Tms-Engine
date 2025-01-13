@@ -8,7 +8,7 @@ namespace Tms.Application.DTOs.Project
 {
     public class ProjectAssignUserDto
     {
-        public int UserId { get; set; }
+        public ICollection<int> UserIds { get; set; }
         public int ProjectId { get; set; }
     }
 }

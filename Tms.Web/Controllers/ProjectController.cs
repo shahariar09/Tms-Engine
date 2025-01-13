@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tms.Application.DTOs;
+using Tms.Application.DTOs.Project;
 using Tms.Application.ServiceAbstractions;
 using Tms.Application.Services;
 
@@ -66,11 +67,11 @@ namespace Tms.Web.Controllers
 
         //assign project to user
         [HttpPost("assign-user")]
-        public async Task<IActionResult> AssignUserToProject([FromQuery] int userId, [FromQuery] int projectId)
+        public async Task<IActionResult> AssignUserToProject(ProjectAssignUserDto dto)
         {
             try
             {
-                await _projectService.AssignProjectToUser(projectId, userId);
+                //await _projectService.AssignProjectToUser(dto.ProjectId, dto.UserIds);
                 return Ok(new { message = "User successfully assigned to project" });
             }
             catch (Exception ex)
