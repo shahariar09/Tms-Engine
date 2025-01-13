@@ -22,6 +22,10 @@ namespace Tms.Infrastructure
         {
             base.OnModelCreating(builder);
 
+            // Set custom table names
+            builder.Entity<TaskItem>().ToTable("TMS_TASK_ITEM");
+            builder.Entity<Project>().ToTable("TMS_PROJECT");
+
             // Define relationships for UserTask entity
             builder.Entity<UserTask>(entity =>
             {
@@ -53,6 +57,12 @@ namespace Tms.Infrastructure
                     .HasForeignKey(pu => pu.UserId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            builder.Entity<TaskItem>()
+        .HasOne(t => t.Project)
+        .WithMany(p => p.TaskItems)
+        .HasForeignKey(t => t.ProjectId)
+        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

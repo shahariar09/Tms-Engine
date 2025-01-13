@@ -13,5 +13,9 @@ namespace Tms.Application.ServiceAbstractions
         Task<bool> DeleteTaskAsync(int id);
         Task AssignUserToTask(int userId, int taskId);
         Task UnassignUserFromTask(int userId, int taskId);
+        Task<IEnumerable<TaskItemDto>> GetProjectTasksAsync(int projectId);
+        Task<IDictionary<string, IEnumerable<TaskItemDto>>> GetProjectTasksBoardAsync(int projectId);
+        Task<bool> UpdateTaskStatusAsync(int taskId, string newStatus);
+
     }
      }
