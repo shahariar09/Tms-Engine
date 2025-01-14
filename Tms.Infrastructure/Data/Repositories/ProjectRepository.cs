@@ -16,18 +16,33 @@ namespace Tms.Infrastructure.Data.Repositories
             _context = context;
         }
 
+        //public async Task<IEnumerable<Project>> GetAllAsync()
+        //{
+        //    return await _context.Projects
+        //        .Include(p => p.ProjectAssignUsers)
+        //        .ThenInclude(pu => pu.User)
+        //        .ToListAsync();
+        //}
+
         public async Task<IEnumerable<Project>> GetAllAsync()
         {
-            return await _context.Projects
-                .Include(p => p.ProjectAssignUsers) 
-                .ThenInclude(pu => pu.User)        
-                .ToListAsync();
+            return await _context.Projects.ToListAsync();
         }
+
+        public async Task<IQueryable<Project>> GetAllProjectsAsync()
+        {
+            var result =  _context.Projects
+                .Include(p => p.ProjectUsers)
+                .ThenInclude(pu => pu.User)
+                .AsQueryable();
+            return result;
+        }
+
 
         public async Task<Project> GetByIdAsync(int id)
         {
             return await _context.Projects
-               .Include(p => p.ProjectAssignUsers) 
+               .Include(p => p.ProjectUsers) 
                .ThenInclude(pu => pu.User)        
                .FirstOrDefaultAsync(p => p.Id == id);
         }
@@ -60,7 +75,7 @@ namespace Tms.Infrastructure.Data.Repositories
         public async Task<IEnumerable<Project>> GetAllProjectsWithUsersAsync()
         {
             return await _context.Projects
-                .Include(p => p.ProjectAssignUsers) 
+                .Include(p => p.ProjectUsers) 
                 .ThenInclude(pu => pu.User)        
                 .ToListAsync();
         }
@@ -69,9 +84,12 @@ namespace Tms.Infrastructure.Data.Repositories
         public async Task<Project> GetProjectWithUsersByIdAsync(int id)
         {
             return await _context.Projects
-                .Include(p => p.ProjectAssignUsers) 
-                .ThenInclude(pu => pu.User)       
+                .Include(p => p.ProjectUsers)
+                .ThenInclude(pu => pu.User) // Include related User entity
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
+
+
+
     }
 }

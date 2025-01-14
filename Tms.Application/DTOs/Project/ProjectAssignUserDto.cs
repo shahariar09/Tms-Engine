@@ -10,5 +10,9 @@ namespace Tms.Application.DTOs.Project
     {
         public ICollection<int> UserIds { get; set; }
         public int ProjectId { get; set; }
+
+       
     }
+
+    
 }

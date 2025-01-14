@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Tms.Application.DTOs;
 using Tms.Application.ServiceAbstractions;
 using Tms.Domain.Entity;
@@ -32,23 +33,51 @@ namespace Tms.Application.Services
             _projectAssignUserRepository = projectAssignUserRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+            
         }
 
 
-        public async Task<IEnumerable<ProjectDto>> GetAllProjectsAsync()
+        public async Task<List<ProjectDto>> GetAllProjectsAsync()
         {
-            var projects = await _projectRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<ProjectDto>>(projects);
+            var projects = await _projectRepository.GetAllProjectsAsync();
+            return _mapper.Map<List<ProjectDto>>(await projects.ToListAsync());
         }
 
+        //public async Task<ProjectDto> GetProjectByIdAsync(int id)
+        //{
+        //    var project = await _projectRepository.GetByIdAsync(id);
+        //    if (project == null)
+        //        throw new Exception("Project not found");
+
+        //    return _mapper.Map<ProjectDto>(project);
+        //}
+
+        // Application/Services/ProjectService.cs
+        // Application/Services/ProjectService.cs
         public async Task<ProjectDto> GetProjectByIdAsync(int id)
         {
-            var project = await _projectRepository.GetByIdAsync(id);
-            if (project == null)
-                throw new Exception("Project not found");
+            // Fetch project from repository using GetProjectWithUsersByIdAsync method
+            var project = await _projectRepository.GetProjectWithUsersByIdAsync(id);
 
-            return _mapper.Map<ProjectDto>(project);
+            if (project == null)
+                return null;
+
+            // Map project entity to ProjectDto
+            var projectDto = _mapper.Map<ProjectDto>(project);
+
+            // Add the assigned users to the DTO
+            projectDto.ProjectUsers = project.ProjectUsers
+                .Select(pu => new ProjectUserDto
+                {
+                    UserId = pu.UserId,
+                    UserName = pu.User.Name
+                }).ToList();
+
+            return projectDto;
         }
+
+
+
 
         public async Task<ProjectDto> CreateProjectAsync(CreateProjectDto projectDto)
         {
@@ -143,7 +172,27 @@ namespace Tms.Application.Services
             }
         }
 
-        
+        public async Task<ProjectDto> GetProjectWithUsersByIdAsync(int id)
+        {
+            var project = await _projectRepository.GetProjectWithUsersByIdAsync(id);
+            if (project == null)
+                throw new Exception("Project not found");
+
+            var projectDto = _mapper.Map<ProjectDto>(project);
+
+            // Populate assigned users in the DTO
+            projectDto.ProjectUsers = project.ProjectUsers
+                .Select(pu => new ProjectUserDto
+                {
+                    UserId = pu.UserId,
+                    UserName = pu.User.Name
+                }).ToList();
+
+            return projectDto;
+        }
+
+
+
 
 
 

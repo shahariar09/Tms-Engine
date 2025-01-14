@@ -47,7 +47,7 @@ namespace Tms.Infrastructure
 
                 // Relationship between Project and ProjectAssignUser
                 entity.HasOne(pu => pu.Project)
-                    .WithMany(p => p.ProjectAssignUsers)
+                    .WithMany(p => p.ProjectUsers)
                     .HasForeignKey(pu => pu.ProjectId)
                     .OnDelete(DeleteBehavior.Restrict);
 
