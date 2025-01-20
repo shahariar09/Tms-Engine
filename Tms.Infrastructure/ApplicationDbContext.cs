@@ -59,10 +59,12 @@ namespace Tms.Infrastructure
             });
 
             builder.Entity<TaskItem>()
-        .HasOne(t => t.Project)
-        .WithMany(p => p.TaskItems)
-        .HasForeignKey(t => t.ProjectId)
-        .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(t => t.Project)
+                .WithMany(p => p.TaskItems)
+                .HasForeignKey(t => t.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
+
     }
 }
+
