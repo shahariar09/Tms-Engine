@@ -12,6 +12,6 @@ namespace Tms.Application.DTOs.User
         public string CurrentPassword { get; set; }
         public string NewPassword { get; set; }
 
-        public int UserId { get; set; } 
+        public string ConfirmPassword { get; set; }
     }
 }

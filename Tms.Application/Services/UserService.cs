@@ -121,23 +121,53 @@ namespace Tms.Application.Services
 
 
         // Implement ChangePasswordAsync method
+        //public async Task ChangePasswordAsync(ChangePasswordDto changePasswordDto)
+        //{
+        //    var user = await _UserRepository.GetByIdAsync(changePasswordDto.UserId);
+        //    if (user == null)
+        //        throw new KeyNotFoundException("User not found");
+
+        //    var currentHashedPassword = HashPassword(changePasswordDto.CurrentPassword, user.Salt);
+        //    if (currentHashedPassword != user.PasswordHash)
+        //        throw new UnauthorizedAccessException("Current password is incorrect");
+
+        //    var newSalt = GenerateSalt();
+        //    var newHashedPassword = HashPassword(changePasswordDto.NewPassword, newSalt);
+
+        //    user.PasswordHash = newHashedPassword;
+        //    user.Salt = newSalt;
+        //    await _UserRepository.UpdateAsync(user);
+        //    await _UserRepository.SaveChangesAsync();
+        //}
+
         public async Task ChangePasswordAsync(ChangePasswordDto changePasswordDto)
         {
-            var user = await _UserRepository.GetByIdAsync(changePasswordDto.UserId);
+            // Verify that the new password matches the confirmed password
+            if (changePasswordDto.NewPassword != changePasswordDto.ConfirmPassword)
+                throw new ArgumentException("New password and confirmation password do not match");
+
+            // Retrieve the user by email
+            var user = await _UserRepository.GetByEmailAsync(changePasswordDto.Email);
             if (user == null)
                 throw new KeyNotFoundException("User not found");
 
+            // Verify current password
             var currentHashedPassword = HashPassword(changePasswordDto.CurrentPassword, user.Salt);
             if (currentHashedPassword != user.PasswordHash)
                 throw new UnauthorizedAccessException("Current password is incorrect");
 
+            // Generate new password hash and salt
             var newSalt = GenerateSalt();
             var newHashedPassword = HashPassword(changePasswordDto.NewPassword, newSalt);
 
+            // Update user password and salt
             user.PasswordHash = newHashedPassword;
             user.Salt = newSalt;
+
+            // Save changes
             await _UserRepository.UpdateAsync(user);
             await _UserRepository.SaveChangesAsync();
         }
+
     }
 }
