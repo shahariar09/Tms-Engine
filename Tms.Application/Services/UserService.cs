@@ -91,18 +91,34 @@ namespace Tms.Application.Services
         }
 
         // Implement LoginAsync method
+        //public async Task<string> LoginAsync(LoginDto loginDto)
+        //{
+        //    var user = await _UserRepository.GetByIdAsync(loginDto.UserId); // Use GetByIdAsync method
+        //    if (user == null)
+        //        throw new UnauthorizedAccessException("Invalid username or password");
+
+        //    var hashedPassword = HashPassword(loginDto.Password, user.Salt); // Hash the entered password with the stored salt
+        //    if (hashedPassword != user.PasswordHash)
+        //        throw new UnauthorizedAccessException("Invalid username or password");
+
+        //    return "Login successful";
+        //}
+
         public async Task<string> LoginAsync(LoginDto loginDto)
         {
-            var user = await _UserRepository.GetByIdAsync(loginDto.UserId); // Use GetByIdAsync method
+            // Fetch the user by Email instead of UserId
+            var user = await _UserRepository.GetByEmailAsync(loginDto.Email); // Use a new method to fetch by email
             if (user == null)
-                throw new UnauthorizedAccessException("Invalid username or password");
+                throw new UnauthorizedAccessException("Invalid email or password");
 
-            var hashedPassword = HashPassword(loginDto.Password, user.Salt); // Hash the entered password with the stored salt
+            // Hash the entered password using the user's stored salt
+            var hashedPassword = HashPassword(loginDto.Password, user.Salt);
             if (hashedPassword != user.PasswordHash)
-                throw new UnauthorizedAccessException("Invalid username or password");
+                throw new UnauthorizedAccessException("Invalid email or password");
 
             return "Login successful";
         }
+
 
         // Implement ChangePasswordAsync method
         public async Task ChangePasswordAsync(ChangePasswordDto changePasswordDto)

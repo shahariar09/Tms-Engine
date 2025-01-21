@@ -34,19 +34,34 @@ namespace Tms.Web.Controllers
         }
 
         // POST: api/user/login
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        //{
+        //    try
+        //    {
+        //        var result = await _userService.LoginAsync(loginDto);
+        //        return Ok(result); // Return login success response
+        //    }
+        //    catch (UnauthorizedAccessException ex)
+        //    {
+        //        return Unauthorized(new { message = ex.Message });
+        //    }
+        //}
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            try
+            var result = await _userService.LoginAsync(loginDto);
+
+            if (result == null)
             {
-                var result = await _userService.LoginAsync(loginDto);
-                return Ok(result); // Return login success response
+                return Unauthorized(new { message = "Invalid email or password" });
             }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
+
+            return Ok(new { message = "Login successful", token = result });
         }
+
+
+
 
         // POST: api/user/change-password
         [HttpPost("change-password")]

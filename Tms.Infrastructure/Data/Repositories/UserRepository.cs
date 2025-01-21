@@ -50,5 +50,11 @@ namespace Tms.Infrastructure.Data.Repositories
         {
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await _dbContext.Set<User>().SingleOrDefaultAsync(u => u.Email == email);
+        }
+
     }
 }
