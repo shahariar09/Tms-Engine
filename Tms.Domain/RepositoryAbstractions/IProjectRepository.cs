@@ -15,5 +15,7 @@ namespace Tms.Domain.RepositoryAbstractions
         Task<IEnumerable<Project>> GetAllProjectsWithUsersAsync();
         Task<Project> GetProjectWithUsersByIdAsync(int id);
 
+        Task<IQueryable<Project>> GetAllProjectsAsync();
+
     }
 }

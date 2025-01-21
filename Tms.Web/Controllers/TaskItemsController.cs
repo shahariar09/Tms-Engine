@@ -6,6 +6,7 @@ using Tms.Application.DTOs;
 using Tms.Application.Services;
 using Tms.Application.ServiceAbstractions;
 using static Tailoring.Application.Common.Exceptions.ValidationException;
+using Tms.Domain.Entity;
 
 namespace Tms.Web.Controllers
 {
@@ -38,9 +39,20 @@ namespace Tms.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<TaskItemDto>> CreateTask(CreateTaskItemDto taskDto)
         {
+            // Validate status
+            if (!TaskStatusEnum.IsValidStatus(taskDto.Status))
+            {
+                return BadRequest($"Invalid status. Valid statuses are: {string.Join(", ", TaskStatusEnum.ValidStatuses)}");
+            }
+
+            // Normalize the status case
+            taskDto.Status = TaskStatusEnum.ValidStatuses.First(s =>
+                s.Equals(taskDto.Status, StringComparison.OrdinalIgnoreCase));
+
             var task = await _taskService.CreateTaskAsync(taskDto);
             return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, CreateTaskItemDto taskDto)
@@ -64,19 +76,6 @@ namespace Tms.Web.Controllers
             return NoContent();
         }
 
-        //[HttpPost("assign")]
-        //public async Task<IActionResult> AssignUserToTask([FromBody] UserTaskAssignmentDto assignment)
-        //{
-        //    try
-        //    {
-        //        await _taskService.AssignUserToTask(assignment.UserId, assignment.TaskId);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
 
         [HttpPost("assign-user")]
         public async Task<IActionResult> AssignUserToTask([FromQuery] int userId, [FromQuery] int taskId)
@@ -126,5 +125,43 @@ namespace Tms.Web.Controllers
             }
         }
 
+        [HttpGet("project/{projectId}")]
+        public async Task<ActionResult<IEnumerable<TaskItemDto>>> GetProjectTasks(int projectId)
+        {
+            var tasks = await _taskService.GetProjectTasksAsync(projectId);
+            return Ok(tasks);
+        }
+
+        [HttpGet("project/{projectId}/board")]
+        public async Task<ActionResult<IDictionary<string, IEnumerable<TaskItemDto>>>> GetProjectTasksBoard(int projectId)
+        {
+            var taskBoard = await _taskService.GetProjectTasksBoardAsync(projectId);
+            return Ok(taskBoard);
+        }
+
+        [HttpPatch("{taskId}/status")]
+        public async Task<IActionResult> UpdateTaskStatus(int taskId, [FromBody] string newStatus)
+        {
+            if (string.IsNullOrWhiteSpace(newStatus))
+                return BadRequest("Status cannot be empty");
+
+            // Case-insensitive status validation
+            if (!TaskStatusEnum.IsValidStatus(newStatus))
+                return BadRequest($"Invalid status. Valid statuses are: {string.Join(", ", TaskStatusEnum.ValidStatuses)}");
+
+            // Normalize the status to match the enum values
+            string normalizedStatus = TaskStatusEnum.ValidStatuses.First(s =>
+                s.Equals(newStatus, StringComparison.OrdinalIgnoreCase));
+
+            var result = await _taskService.UpdateTaskStatusAsync(taskId, normalizedStatus);
+
+            if (!result)
+                return NotFound($"Task with ID {taskId} not found");
+
+            return Ok(new { status = normalizedStatus });
+        }
+
+
     }
 }
+

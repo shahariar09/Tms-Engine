@@ -17,6 +17,7 @@ namespace Tms.Application.Mappings
             // Mapping for Project
             CreateMap<Project, ProjectDto>();
             CreateMap<CreateProjectDto, Project>();
+            CreateMap<ProjectUser, ProjectUserDto>();
 
             // Mapping for TaskItem to TaskItemDto with AssignedUsers
             CreateMap<TaskItem, TaskItemDto>()

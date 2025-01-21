@@ -66,24 +66,53 @@ namespace Tms.Web.Controllers
 
 
         //assign project to user
+        //[HttpPost("assign-user")]
+        //public async Task<IActionResult> AssignUserToProject(ProjectAssignUserDto dto)
+        //{
+        //    try
+        //    {
+        //        await _projectService.AssignProjectToUser(dto.ProjectId, dto.UserIds);
+        //        return Ok(new { message = "User successfully assigned to project" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new
+        //        {
+        //            message = "An error occurred while assigning the user to the project",
+        //            error = ex.Message,
+        //            innerError = ex.InnerException?.Message
+        //        });
+        //    }
+        //}
         [HttpPost("assign-user")]
         public async Task<IActionResult> AssignUserToProject(ProjectAssignUserDto dto)
         {
+            if (dto.UserIds == null || !dto.UserIds.Any())
+            {
+                return BadRequest(new { message = "UserIds cannot be null or empty." });
+            }
+
             try
             {
-                //await _projectService.AssignProjectToUser(dto.ProjectId, dto.UserIds);
-                return Ok(new { message = "User successfully assigned to project" });
+                foreach (var userId in dto.UserIds)
+                {
+                    await _projectService.AssignProjectToUser(dto.ProjectId, userId);
+                }
+
+                return Ok(new { message = "Users successfully assigned to project." });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new
                 {
-                    message = "An error occurred while assigning the user to the project",
+                    message = "An error occurred while assigning the user to the project.",
                     error = ex.Message,
                     innerError = ex.InnerException?.Message
                 });
             }
         }
+
+
 
         [HttpDelete("unassign-user")]
         public async Task<IActionResult> UnassignUserFromProject([FromQuery] int projectId, [FromQuery] int userId)
