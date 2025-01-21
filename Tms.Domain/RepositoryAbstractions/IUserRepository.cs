@@ -15,6 +15,8 @@ namespace Tms.Domain.RepositoryAbstractions
         Task<IEnumerable<User>> GetAllAsync();
         Task DeleteAsync(int id);
         Task SaveChangesAsync();
+        Task<User> GetByEmailAsync(string email);
+
 
     }
 }

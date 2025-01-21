@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tms.Infrastructure;
 
@@ -11,9 +12,11 @@ using Tms.Infrastructure;
 namespace Tms.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250119124626_Password")]
+    partial class Password
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace Tms.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TMS_PROJECT_USER", (string)null);
+                    b.ToTable("TMS_PROJECT_USER");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.Role", b =>
@@ -75,7 +78,7 @@ namespace Tms.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TMS_ROLE", (string)null);
+                    b.ToTable("TMS_ROLE");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.TaskItem", b =>
@@ -147,7 +150,7 @@ namespace Tms.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("TMS_USER", (string)null);
+                    b.ToTable("TMS_USER");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.UserTask", b =>
@@ -170,7 +173,7 @@ namespace Tms.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TMS_USER_TASK", (string)null);
+                    b.ToTable("TMS_USER_TASK");
                 });
 
             modelBuilder.Entity("Tms.Domain.Entity.ProjectUser", b =>
